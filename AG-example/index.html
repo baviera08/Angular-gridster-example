@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Angular Gridster</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="dist/angular-gridster.min.css" />
+    <link rel="stylesheet" href="demo/dashboard/style.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+    <script src="https://code.angularjs.org/1.2.15/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
+
+    <script src="src/angular-gridster.js"></script>
+
+    <script type="text/javascript">
+        (function() {
+            angular.module('app', ['gridster', 'ui.bootstrap', 'ngRoute'])
+                .config(['$routeProvider',
+                    function($routeProvider) {
+                        $routeProvider
+                            .when('/dashboard', {
+                                templateUrl: 'demo/dashboard/view.html',
+                                controller: 'DashboardCtrl'
+                            });
+                    }
+                ])
+                .controller('RootCtrl', function($scope) {
+                    $scope.$on('$locationChangeStart', function(e, next, current) {
+                        $scope.page = next.split('/').splice(-1);
+                        //$scope.styleUrl = 'demo/' + $scope.page + '/style.css'
+                    });
+                });
+        })();
+    </script>
+
+  <!--  <script type="text/javascript">
+        (function() {
+        	angular.module('app', ['gridster', 'ui.bootstrap', 'ngRoute'])
+        		.config(['$routeProvider',
+        			function($routeProvider) {
+        				$routeProvider
+        					.when('/dashboard', {
+        						templateUrl: 'demo/dashboard/view.html',
+        						controller: 'DashboardCtrl'
+        					});
+        			}
+        		])
+        		.controller('RootCtrl', function($scope) {
+        			$scope.$on('$locationChangeStart', function(e, next, current) {
+        				$scope.page = next.split('/').splice(-1);
+        				$scope.styleUrl = 'demo/' + $scope.page + '/style.css'
+        			});
+        		});
+        })();
+    </script> -->
+
+    <script src="demo/main/script.js"></script>
+    <script src="demo/dashboard/script.js"></script>
+</head>
+
+<body ng-app="app">
+    <div ng-controller="RootCtrl">
+        <link rel="stylesheet" ng-href="{{ styleUrl }}" />
+
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <a class="navbar-brand" href="#">Angular Gridster</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+  <!--               <li ng-class="{active: page == 'main'}"><a href="#/main">Main Demo</a></li> -->
+                <li ng-class="{active: page == 'dashboard'}"><a href="#/dashboard">Dashboard Demo</a> </li>
+                <li><a>|</a></li>
+  <!--              <li>
+                    <a href="coverage" target="_blank" class="code-coverage">Code Coverage</a>
+                </li> -->
+            </ul>
+        </div>
+
+        <div ng-controller= "DashboardCtrl">
+            <div class="page-header"  >
+                   
+                <a class="pull-right btn btn-primary" ng-click="addWidget()"><i class="glyphicon glyphicon-plus"></i> Add Widget</a>
+                <a class="pull-right btn btn-warning" ng-click="clear()"><i class="glyphicon glyphicon-trash"></i> Clear</a>
+                <h1 style="display: inline-block; width: 200px;">Dashboard</h1>
+                <select class="form-control" style="width: 150px; margin-bottom: 20px; display:inline-block;" ng-change="changeDashboard()" ng-model="selectedDashboardId" ng-options="d.id as d.name for d in dashboards | object2Array | orderBy:'id'">
+            </select>
+
+            </div>
+            <div gridster="gridsterOptions" >
+                <ul>
+                    <li gridster-item="widget" ng-repeat="widget in dashboard.widgets">
+                        <div class="box" ng-controller="CustomWidgetCtrl">
+                            <div class="box-header">
+                                <h3>{{ widget.name }}</h3>
+                                <div class="box-header-btns pull-right">
+                                    <a title="settings" ng-click="openSettings(widget)"><i class="glyphicon glyphicon-cog"></i></a>
+                                    <a title="Remove widget" ng-click="remove(widget)"><i class="glyphicon glyphicon-trash"></i></a>
+                                </div>
+                            </div>
+                            <div class="box-content" ng-controller= "crtl">
+                               
+                                    <test text="1"></test>
+                                    <test text="2"></test>
+                            </div>
+                           <!-- <div class="box-content" ng-controller= "Controller">
+                                  <my-customer></my-customer>
+                            </div>-->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    <div class="container" ng-view></div>
+
+ </div>
+</body>
+
+</html>
